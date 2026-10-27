@@ -1,0 +1,63 @@
+{
+  "appTitle": "JELAJAH BALI",
+  "tagline": "Your Bali Journey, Beautifully Planned.",
+  "nav": {
+    "home": "Home",
+    "destinations": "Destinations",
+    "map": "Explore Map",
+    "planner": "Trip Planner",
+    "tours": "Tours & Practical",
+    "transport": "Transport & Cost",
+    "favorites": "Favorites",
+    "sos": "SOS / Safety",
+    "profile": "Profile & Admin"
+  },
+  "hero": {
+    "kicker": "UNIFIED BALI DISCOVERY & SMART ITINERARY COMPANION",
+    "headline": "Discover Bali from Southern Cliffs to Northern Highlands.",
+    "subheadline": "Explore 100+ verified destinations across all 9 regencies & Nusa Islands, preview interactive 360° panoramas, calculate transparent transport costs, and optimize multi-stop routes.",
+    "searchPlaceholder": "Search beaches, temples, waterfalls, Ubud, Nusa Penida...",
+    "ctaExplore": "Explore Destinations",
+    "ctaPlanner": "Build Itinerary",
+    "cta360": "Explore 360°",
+    "ctaTours": "Find Local Tours",
+    "ctaMap": "Open Interactive Map"
+  },
+  "categories": {
+    "all": "All Categories",
+    "beach": "Beaches",
+    "temple_culture": "Temples & Culture",
+    "waterfall": "Waterfalls",
+    "mountain": "Mountains & Volcanoes",
+    "rice_terrace_nature": "Rice Terraces & Nature",
+    "culinary": "Culinary",
+    "snorkeling_diving": "Snorkeling & Diving",
+    "surfing": "Surfing",
+    "family": "Family Activities",
+    "adventure": "Adventure",
+    "wellness_spa": "Wellness & Spa",
+    "hidden_gem": "Hidden Gems",
+    "traditional_village": "Traditional Villages",
+    "sunset_spot": "Sunset Spots",
+    "sunrise_spot": "Sunrise Spots"
+  },
+  "common": {
+    "verifiedData": "Verified Source",
+    "estimatedData": "Reference Estimate",
+    "openInMaps": "Open in Google Maps",
+    "directions": "Get Directions",
+    "saveFavorite": "Save Favorite",
+    "saved": "Saved",
+    "addToTrip": "Add to Itinerary",
+    "inTrip": "In Itinerary",
+    "viewDetails": "Full Details",
+    "explore360": "Explore 360°",
+    "share": "Share",
+    "retry": "Retry",
+    "loading": "Loading data...",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "demoModeLabel": "VERIFIED SEED / DEMO MODE",
+    "close": "Close"
+  }
+}

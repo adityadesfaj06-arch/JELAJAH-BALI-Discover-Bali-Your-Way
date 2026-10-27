@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated traveler profile and non-PII preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "preferredLanguage": { "type": "string", "enum": ["id", "en"], "maxLength": 5 },
+        "defaultCurrency": { "type": "string", "enum": ["IDR", "USD", "AUD", "EUR", "SGD"], "maxLength": 5 },
+        "travelStyle": { "type": "string", "enum": ["relaxed", "balanced", "packed"], "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "preferredLanguage", "defaultCurrency", "travelStyle", "createdAt", "updatedAt"]
+    },
+    "SavedPlace": {
+      "title": "SavedPlace",
+      "description": "User bookmarked Bali destination referenced by placeId",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "placeId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "encryptedNotes": { "type": "string", "maxLength": 1000 },
+        "category": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "placeId", "notes", "category", "createdAt", "updatedAt"]
+    },
+    "Trip": {
+      "title": "Trip",
+      "description": "User saved Bali multi-day trip itinerary and budget plan",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "tripName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "startDate": { "type": "string", "maxLength": 20 },
+        "endDate": { "type": "string", "maxLength": 20 },
+        "origin": { "type": "string", "maxLength": 120 },
+        "travelers": { "type": "integer" },
+        "pace": { "type": "string", "enum": ["relaxed", "balanced", "packed"], "maxLength": 20 },
+        "vehicleId": { "type": "string", "maxLength": 60 },
+        "budgetIDR": { "type": "number" },
+        "totalEstimatedCostIDR": { "type": "number" },
+        "stopIds": { "type": "string", "maxLength": 2000 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "visibility": { "type": "string", "enum": ["private", "shared"], "maxLength": 20 },
+        "status": { "type": "string", "enum": ["draft", "planned", "archived"], "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "tripName",
+        "startDate",
+        "endDate",
+        "origin",
+        "travelers",
+        "pace",
+        "vehicleId",
+        "budgetIDR",
+        "totalEstimatedCostIDR",
+        "stopIds",
+        "notes",
+        "visibility",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EmergencyContact": {
+      "title": "EmergencyContact",
+      "description": "Personal emergency contact for tourist SOS assistance",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "contactName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "phone": { "type": "string", "minLength": 3, "maxLength": 40 },
+        "relationship": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "contactName", "phone", "relationship", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile preferences isolated to owner"
+    },
+    "/savedPlaces/{savedPlaceId}": {
+      "schema": { "$ref": "#/entities/SavedPlace" },
+      "description": "Saved Bali destinations per user"
+    },
+    "/trips/{tripId}": {
+      "schema": { "$ref": "#/entities/Trip" },
+      "description": "Saved Bali itineraries and cost plans"
+    },
+    "/emergencyContacts/{contactId}": {
+      "schema": { "$ref": "#/entities/EmergencyContact" },
+      "description": "Private emergency contacts for SOS screen"
+    }
+  }
+}

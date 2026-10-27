@@ -1,0 +1,202 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 1: Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email == 'adityadesfaj06@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Blueprints
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'preferredLanguage', 'defaultCurrency', 'travelStyle', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'displayName', 'photoURL', 'preferredLanguage', 'defaultCurrency', 'travelStyle', 'createdAt', 'updatedAt']) &&
+        data.uid == request.auth.uid &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100 &&
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500)) &&
+        data.preferredLanguage is string && data.preferredLanguage.size() <= 5 && data.preferredLanguage in ['id', 'en'] &&
+        data.defaultCurrency is string && data.defaultCurrency.size() <= 5 && data.defaultCurrency in ['IDR', 'USD', 'AUD', 'EUR', 'SGD'] &&
+        data.travelStyle is string && data.travelStyle.size() <= 20 && data.travelStyle in ['relaxed', 'balanced', 'packed'] &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidSavedPlace(data) {
+      return data.keys().hasAll(['userId', 'placeId', 'notes', 'category', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['userId', 'placeId', 'notes', 'encryptedNotes', 'category', 'createdAt', 'updatedAt']) &&
+        data.userId == request.auth.uid &&
+        data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 && data.userId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.placeId is string && data.placeId.size() >= 1 && data.placeId.size() <= 128 && data.placeId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.notes is string && data.notes.size() <= 500 &&
+        (!('encryptedNotes' in data) || (data.encryptedNotes is string && data.encryptedNotes.size() <= 1000)) &&
+        data.category is string && data.category.size() >= 1 && data.category.size() <= 50 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidTrip(data) {
+      return data.keys().hasAll([
+          'userId', 'tripName', 'startDate', 'endDate', 'origin',
+          'travelers', 'pace', 'vehicleId', 'budgetIDR', 'totalEstimatedCostIDR',
+          'stopIds', 'notes', 'visibility', 'status', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'userId', 'tripName', 'startDate', 'endDate', 'origin',
+          'travelers', 'pace', 'vehicleId', 'budgetIDR', 'totalEstimatedCostIDR',
+          'stopIds', 'notes', 'visibility', 'status', 'createdAt', 'updatedAt'
+        ]) &&
+        data.userId == request.auth.uid &&
+        data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 && data.userId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.tripName is string && data.tripName.size() >= 1 && data.tripName.size() <= 120 &&
+        data.startDate is string && data.startDate.size() >= 1 && data.startDate.size() <= 20 &&
+        data.endDate is string && data.endDate.size() >= 1 && data.endDate.size() <= 20 &&
+        data.origin is string && data.origin.size() >= 1 && data.origin.size() <= 120 &&
+        data.travelers is int && data.travelers >= 1 && data.travelers <= 100 &&
+        data.pace is string && data.pace.size() <= 20 && data.pace in ['relaxed', 'balanced', 'packed'] &&
+        data.vehicleId is string && data.vehicleId.size() >= 1 && data.vehicleId.size() <= 60 &&
+        data.budgetIDR is number && data.budgetIDR >= 0 && data.budgetIDR <= 10000000000 &&
+        data.totalEstimatedCostIDR is number && data.totalEstimatedCostIDR >= 0 && data.totalEstimatedCostIDR <= 10000000000 &&
+        data.stopIds is string && data.stopIds.size() <= 2000 &&
+        data.notes is string && data.notes.size() <= 1000 &&
+        data.visibility is string && data.visibility.size() <= 20 && data.visibility in ['private', 'shared'] &&
+        data.status is string && data.status.size() <= 20 && data.status in ['draft', 'planned', 'archived'] &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidEmergencyContact(data) {
+      return data.keys().hasAll(['userId', 'contactName', 'phone', 'relationship', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['userId', 'contactName', 'phone', 'relationship', 'createdAt', 'updatedAt']) &&
+        data.userId == request.auth.uid &&
+        data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 && data.userId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.contactName is string && data.contactName.size() >= 1 && data.contactName.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 3 && data.phone.size() <= 40 &&
+        data.relationship is string && data.relationship.size() >= 1 && data.relationship.size() <= 50 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    // 1. User Profiles Collection
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && (request.auth.uid == userId || isAdmin());
+      allow list: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow create: if isVerifiedUser() && isValidId(userId) && request.auth.uid == userId &&
+        isValidUserProfile(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(userId) && isValidUserProfile(incoming()) && (
+        isAdmin() || (
+          request.auth.uid == userId &&
+          existing().uid == request.auth.uid &&
+          incoming().uid == existing().uid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'preferredLanguage', 'defaultCurrency', 'travelStyle', 'updatedAt'])
+        )
+      );
+      allow delete: if isVerifiedUser() && isValidId(userId) && (request.auth.uid == userId || isAdmin());
+    }
+
+    // 2. Saved Places Collection
+    match /savedPlaces/{savedPlaceId} {
+      allow get: if isSignedIn() && isValidId(savedPlaceId) && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isVerifiedUser() && isValidId(savedPlaceId) &&
+        isValidSavedPlace(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(savedPlaceId) && isValidSavedPlace(incoming()) && (
+        isAdmin() || (
+          existing().userId == request.auth.uid &&
+          incoming().userId == existing().userId &&
+          incoming().placeId == existing().placeId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['notes', 'encryptedNotes', 'category', 'updatedAt'])
+        )
+      );
+      allow delete: if isVerifiedUser() && isValidId(savedPlaceId) && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // 3. Trips Collection
+    match /trips/{tripId} {
+      allow get: if isValidId(tripId) && (
+        resource.data.visibility == 'shared' ||
+        (isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin()))
+      );
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isVerifiedUser() && isValidId(tripId) &&
+        isValidTrip(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(tripId) && isValidTrip(incoming()) && (
+        isAdmin() || (
+          existing().userId == request.auth.uid &&
+          existing().status != 'archived' &&
+          incoming().userId == existing().userId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'tripName', 'startDate', 'endDate', 'origin', 'travelers',
+            'pace', 'vehicleId', 'budgetIDR', 'totalEstimatedCostIDR',
+            'stopIds', 'notes', 'visibility', 'status', 'updatedAt'
+          ])
+        )
+      );
+      allow delete: if isVerifiedUser() && isValidId(tripId) && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // 4. Emergency Contacts Collection (PII strictly isolated)
+    match /emergencyContacts/{contactId} {
+      allow get: if isSignedIn() && isValidId(contactId) && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isVerifiedUser() && isValidId(contactId) &&
+        isValidEmergencyContact(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(contactId) && isValidEmergencyContact(incoming()) && (
+        existing().userId == request.auth.uid &&
+        incoming().userId == existing().userId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['contactName', 'phone', 'relationship', 'updatedAt'])
+      );
+      allow delete: if isVerifiedUser() && isValidId(contactId) && resource.data.userId == request.auth.uid;
+    }
+
+    // 5. Admins Lookup Collection (System-Only Writes)
+    match /admins/{adminUid} {
+      allow get: if isSignedIn() && isValidId(adminUid) && request.auth.uid == adminUid;
+      allow list, create, update, delete: if false;
+    }
+  }
+}

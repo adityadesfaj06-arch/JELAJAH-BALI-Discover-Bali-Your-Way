@@ -1,0 +1,63 @@
+{
+  "appTitle": "JELAJAH BALI",
+  "tagline": "Jelajahi Bali, Rencanakan Perjalananmu.",
+  "nav": {
+    "home": "Beranda",
+    "destinations": "Destinasi",
+    "map": "Jelajahi Peta",
+    "planner": "Trip Planner",
+    "tours": "Tur & Aktivitas",
+    "transport": "Transportasi",
+    "favorites": "Favorit",
+    "sos": "SOS / Bantuan",
+    "profile": "Profil & Admin"
+  },
+  "hero": {
+    "kicker": "EKSPLORASI & PERENCANAAN PERJALANAN BALI TERPADU",
+    "headline": "Jelajahi Bali dari Pesisir Selatan hingga Dataran Tinggi Utara.",
+    "subheadline": "Temukan 100+ destinasi terverifikasi di 9 kabupaten/kota & Kepulauan Nusa, eksplorasi panorama 360°, hitung biaya transportasi transparan, dan susun rute multi-destinasi cerdas.",
+    "searchPlaceholder": "Cari pantai, pura, air terjun, area Ubud, Nusa Penida...",
+    "ctaExplore": "Jelajahi Destinasi",
+    "ctaPlanner": "Buat Itinerary",
+    "cta360": "Explore 360°",
+    "ctaTours": "Temukan Tur",
+    "ctaMap": "Lihat Peta"
+  },
+  "categories": {
+    "all": "Semua Kategori",
+    "beach": "Pantai",
+    "temple_culture": "Pura & Budaya",
+    "waterfall": "Air Terjun",
+    "mountain": "Pegunungan",
+    "rice_terrace_nature": "Sawah & Alam",
+    "culinary": "Kuliner",
+    "snorkeling_diving": "Snorkeling & Diving",
+    "surfing": "Surfing",
+    "family": "Aktivitas Keluarga",
+    "adventure": "Petualangan",
+    "wellness_spa": "Wellness & Spa",
+    "hidden_gem": "Hidden Gems",
+    "traditional_village": "Desa Tradisional",
+    "sunset_spot": "Tempat Sunset",
+    "sunrise_spot": "Tempat Sunrise"
+  },
+  "common": {
+    "verifiedData": "Data Terverifikasi",
+    "estimatedData": "Estimasi Referensi",
+    "openInMaps": "Buka di Google Maps",
+    "directions": "Petunjuk Arah",
+    "saveFavorite": "Simpan Favorit",
+    "saved": "Tersimpan",
+    "addToTrip": "Tambah ke Itinerary",
+    "inTrip": "Dalam Itinerary",
+    "viewDetails": "Detail Lengkap",
+    "explore360": "Panorama 360°",
+    "share": "Bagikan",
+    "retry": "Coba Lagi",
+    "loading": "Memuat data...",
+    "darkMode": "Mode Gelap",
+    "lightMode": "Mode Terang",
+    "demoModeLabel": "MODE DEMO / SEED TERVERIFIKASI",
+    "close": "Tutup"
+  }
+}

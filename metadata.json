@@ -1,0 +1,6 @@
+{
+  "name": "JELAJAH BALI — Discover Bali, Your Way",
+  "description": "AI-Powered Bali Travel Discovery, Interactive Google Maps, 360° Panorama Explorer, Smart Multi-Stop Tour Planner, Cost Calculator & Tourist Safety Companion.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
